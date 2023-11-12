@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org"></script>
+    <title>TODO HTMX</title>
+</head>
+<body>
+    <h1>HTMX TODO</h1>
+    <form hx-put="/add-task" hx-target="this" hx-swap="none">
+      <div> 
+        <input type="text" name="newTask" placeholder="New Task">
+      </div>
+        <button class="btn">Submit</button>
+    </form>
+
+    <div id="contact-container">
+    </div>
+
+    <!-- HTMX GET request -->
+
+    <!-- Container to display the data -->
+    <h1> GEt er done</h1>
+    <div hx-get="/get-tasks" hx-trigger="every 1s">
+      Loading tasks...
+    </div>
+</body>
+</html>
