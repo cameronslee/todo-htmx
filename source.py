@@ -1,10 +1,9 @@
 import sqlite3
 import click
-import json
 
 from flask import Flask, request, Response, redirect, render_template, g, flash
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 
 def get_db():
   if 'db' not in g:
@@ -17,9 +16,9 @@ def get_db():
   return g.db
 
 def close_db(e=None):
-    db = g.pop('db', None)
-    if db is not None:
-      db.close()
+  db = g.pop('db', None)
+  if db is not None:
+    db.close()
 
 def init_db():
   db = get_db()
@@ -46,28 +45,21 @@ def get_tasks():
   records = db.execute('SELECT * FROM tasks').fetchall()
   task_ids = [row[0] for row in records]
   tasks = [row[1] for row in records]
-  print(task_ids)
-  print(tasks)
   res = {task_ids[i]: tasks[i] for i in range(len(task_ids))}
-  print(res)
   return render_template("tasks.html", tasks=res)
 
 @app.route("/add-task", methods=['PUT'])
 def add_task():
-  print("TRYING")
   task = request.form.get("newTask")
-  print("Adding task: ", task)
   db = get_db()
   db.execute("INSERT INTO tasks(task) VALUES (?)",
       (task,)
       )
   db.commit()
-  
   return render_template("index.html")
 
 @app.route("/delete-task/<int:task_id>", methods=['DELETE'])
 def delete_task(task_id):
-  print("deleting: ", task_id)
   db = get_db()
   db.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
   db.commit()
