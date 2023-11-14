@@ -1,0 +1,16 @@
+<table border="1">
+    <thead>
+    </thead>
+    <tbody hx-confirm="are you sure" hx-target="closest tr" hx-swap="outerHTML">
+        {% for id, task in tasks.items() %}
+        <tr>
+            <td id="{{ id }}" >{{ task }}</td>
+            <td>
+              <button class="btn btn-danger" hx-delete="/delete-task/{{ id }}" >
+                Delete
+              </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
