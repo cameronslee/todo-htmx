@@ -8,23 +8,21 @@
     <title>TODO HTMX</title>
 </head>
 <body>
-    <h1>HTMX TODO</h1>
-    <form hx-put="/add-task" hx-target="this" hx-swap="none">
-      <div> 
-        <input type="text" name="newTask" placeholder="New Task">
+    <div id="main">
+      <h1>HTMX TODO</h1>
+        <form hx-put="/add-task" hx-swap="outerHTML" hx-target="#main">
+          <div> 
+            <input id="task-input" type="text" name="newTask" placeholder="New Task">
+          </div>
+            <button class="btn">
+              Submit
+            </button>
+        </form>
+
+        <h1> Tasks </h1>
+        <div id="tasks-container" hx-get="/get-tasks" hx-trigger="load">
+          Loading tasks...
+        </div>
       </div>
-        <button class="btn">Submit</button>
-    </form>
-
-    <div id="contact-container">
-    </div>
-
-    <!-- HTMX GET request -->
-
-    <!-- Container to display the data -->
-    <h1> GEt er done</h1>
-    <div hx-get="/get-tasks" hx-trigger="every 1s">
-      Loading tasks...
-    </div>
 </body>
 </html>

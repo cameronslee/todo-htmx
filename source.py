@@ -40,12 +40,17 @@ def home():
   print("we did it")
   return render_template("index.html")
 
-@app.route("/get-tasks")
+@app.route("/get-tasks", methods=['GET'])
 def get_tasks():
   db = get_db()
-  records = db.execute('SELECT task FROM tasks').fetchall()
-  tasks = [row[0] for row in records]
-  return tasks 
+  records = db.execute('SELECT * FROM tasks').fetchall()
+  task_ids = [row[0] for row in records]
+  tasks = [row[1] for row in records]
+  print(task_ids)
+  print(tasks)
+  res = {task_ids[i]: tasks[i] for i in range(len(task_ids))}
+  print(res)
+  return render_template("tasks.html", tasks=res)
 
 @app.route("/add-task", methods=['PUT'])
 def add_task():
@@ -58,7 +63,15 @@ def add_task():
       )
   db.commit()
   
-  return task 
+  return render_template("index.html")
+
+@app.route("/delete-task/<int:task_id>", methods=['DELETE'])
+def delete_task(task_id):
+  print("deleting: ", task_id)
+  db = get_db()
+  db.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
+  db.commit()
+  return '', 200
 
 if __name__ == '__main__':
   app.run(port = 5000, debug = True)
